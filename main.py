@@ -4,11 +4,12 @@ import re
 def beginPasting(dirPath,logoPath) :
     import os
     for fn in os.listdir(dirPath):
-        if os.path.isfile(fn) and fn.endswith(".JPG"):
+        if fn.endswith(".JPG"):
+            print(fn)
             fName = re.split("\.",fn)
             print(fName)
-            new  = watermark_with_transparency(fn,logoPath)
+            new  = watermark_with_transparency(dirPath+fn,logoPath)
             new.save("newImages/"+fName[0]+"_logo."+fName[1])
 
 
-beginPasting(".","./logos/ip9.png")
+beginPasting("./images/","./logos/ip9.png")

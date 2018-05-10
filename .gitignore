@@ -1,2 +1,8 @@
 /images
 /newImages
+/.idea*
+/*.JPG
+/*.jpg
+/*.PNG
+/*.png
+/__pycache*
