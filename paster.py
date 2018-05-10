@@ -1,20 +1,32 @@
 #!/usr/bin/env python3
+import os
 import sys
+import traceback
 
 try:
-    from PIL import Image
+    from PIL import Image, ExifTags
 except ImportError:
     print("Please install Pillow from: https://pypi.python.org/pypi/Pillow/3.0.0")
     sys.exit(1)
 
 
-def watermark_with_transparency(input_image_path,
-                                watermark_image_path):
+def watermark_with_transparency(input_image_path, watermark_image_path):
     base_image = Image.open(input_image_path)
 
-    if (base_image.size[0] < base_image.size[1]):
-        base_image = base_image.rotate(-90, expand=True)
-
+    if hasattr(base_image, '_getexif'):
+        orientation = 0x0112
+        print(orientation)
+        exif = base_image._getexif()
+        if exif is not None:
+            orientation = exif[orientation]
+            rotations = {
+                3: Image.ROTATE_180,
+                6: Image.ROTATE_270,
+                8: Image.ROTATE_90
+            }
+            if orientation in rotations:
+                base_image = base_image.transpose(rotations[orientation])
+    base_image.save(input_image_path)
     watermark = Image.open(watermark_image_path)
     width, height = base_image.size
     transparent = Image.new('RGBA', (width, height), (0, 0, 0, 0))
@@ -23,7 +35,6 @@ def watermark_with_transparency(input_image_path,
     wsize = int(min(base_image.size[0], base_image.size[1]) * 0.20)
     wpercent = (wsize / float(watermark.size[0]))
     hsize = int((float(watermark.size[1]) * float(wpercent)))
-    simage = watermark.thumbnail((wsize, hsize), Image.ANTIALIAS)
     simage = watermark.resize((wsize, hsize))
     mbox = base_image.getbbox()
     sbox = simage.getbbox()

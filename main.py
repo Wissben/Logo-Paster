@@ -1,15 +1,19 @@
 from paster import watermark_with_transparency
-import re
+import re, sys
 
-def beginPasting(dirPath,logoPath) :
+
+def beginPasting(dirPath, logoPath):
     import os
     for fn in os.listdir(dirPath):
         if fn.endswith(".JPG"):
-            print(fn)
-            fName = re.split("\.",fn)
+            fName = re.split("\.", fn)
             print(fName)
-            new  = watermark_with_transparency(dirPath+fn,logoPath)
-            new.save("newImages/"+fName[0]+"_logo."+fName[1])
+            new = watermark_with_transparency(dirPath + fn, logoPath)
+            new.save("newImages/" + fName[0] + "_logo." + fName[1])
 
 
-beginPasting("./images/","./logos/ip9.png")
+if len(sys.argv) >= 3:
+    images, logo = sys.argv[1], sys.argv[1]
+else:
+    images, logo = "./images/", "./logos/ip9.png"
+beginPasting(images, logo)
