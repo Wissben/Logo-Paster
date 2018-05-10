@@ -35,6 +35,7 @@ def watermark_with_transparency(input_image_path, watermark_image_path):
     wsize = int(min(base_image.size[0], base_image.size[1]) * 0.20)
     wpercent = (wsize / float(watermark.size[0]))
     hsize = int((float(watermark.size[1]) * float(wpercent)))
+    simage = watermark.thumbnail((wsize, hsize), Image.ANTIALIAS)
     simage = watermark.resize((wsize, hsize))
     mbox = base_image.getbbox()
     sbox = simage.getbbox()
