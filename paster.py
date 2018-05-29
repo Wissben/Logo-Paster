@@ -13,19 +13,19 @@ except ImportError:
 def watermark_with_transparency(input_image_path, watermark_image_path):
     base_image = Image.open(input_image_path)
 
-    if hasattr(base_image, '_getexif'):
-        orientation = 0x0112
-        print(orientation)
-        exif = base_image._getexif()
-        if exif is not None:
-            orientation = exif[orientation]
-            rotations = {
-                3: Image.ROTATE_180,
-                6: Image.ROTATE_270,
-                8: Image.ROTATE_90
-            }
-            if orientation in rotations:
-                base_image = base_image.transpose(rotations[orientation])
+    # if hasattr(base_image, '_getexif'):
+    #     orientation = 0x0112
+    #     print(orientation)
+    #     exif = base_image._getexif()
+    #     if exif is not None:
+    #         orientation = exif[orientation]
+    #         rotations = {
+    #             3: Image.ROTATE_180,
+    #             6: Image.ROTATE_270,
+    #             8: Image.ROTATE_90
+    #         }
+    #         if orientation in rotations:
+    #             base_image = base_image.transpose(rotations[orientation])
     base_image.save(input_image_path)
     watermark = Image.open(watermark_image_path)
     width, height = base_image.size
